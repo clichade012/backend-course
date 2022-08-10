@@ -38,12 +38,28 @@ let players =
    ]
 
    router.post('/players', function (req, res) {
-          //let players=[]
-          let Players = req.body.Players
-          players.push(Players)
+   let Student = req.body    
+   let CPlayers = Student.name
+   let isNameRepeated = false
+
+   for ( let i =0; i<players.length; i++){
+     if(players[i].name == CPlayers){
+        isNameRepeated = true
+        break;
+     }
+   }
+         if (isNameRepeated){
+            res.send({msg: "This player was already added!"})
+         } else {
+            players.push(Student)
+            res.send(players)
+         }
+
+        })
        
-       res.send(  { data: players , status: true }  )
-   })
+       
+        
+   
 
 
-module.exports = router;
+module.exports = router ;
