@@ -18,14 +18,21 @@ const userSchema = new mongoose.Schema( {
     // parentsInfo: {
     //     motherName: String,
     //     fatherName: String,
-    //     siblingName: String
+    //     siblingName: Stringe
     // },
     // cars: [ String  ]
 }, { timestamps: true });
 
+const bookschema = new mongoose.Schema({
+    bookName :String,
+    authorName:String,
+    category : String,
+     year:Number,
+},{ timestamps : true})
+
 module.exports = mongoose.model('User', userSchema) //users
 
-
+module.exports = mongoose.model('Book', bookschema)
 
 // String, Number
 // Boolean, Object/json, array
