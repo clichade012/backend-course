@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema( {
         enum: ["male", "female", "LGBTQ"] //"falana" will give an error
     },
     age: Number,
+     pages : Number 
     // isIndian: Boolean,
     // parentsInfo: {
     //     motherName: String,
