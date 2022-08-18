@@ -4,6 +4,10 @@ const BookModel= require("../models/bookModel")
 
 const createAuthor= async function (req, res) {
     let data= req.body
+    let authorId =data.author_id
+    if(!authorId){
+        res.send({status : false , msg : "author_id is not present"})
+    }
      let savedData= await AuthorModel.create(data)
     res.send({msg: savedData})
 }
@@ -17,7 +21,7 @@ const createAuthor= async function (req, res) {
 const getAuthorId= async function (req, res) {
     let xdata= await AuthorModel.find({author_name:"Chetan Bhagat"}).select( { author_id: 1, _id: 0})
     let ndata= await BookModel.find({author_id:{$eq : xdata[0].author_id}})
-    res.send({msg:ndata})
+    res.send({msg:ndata,xdata})
 }
 //module.exports.createAuthor= createAuthor
 module.exports.getAuthorId=getAuthorId

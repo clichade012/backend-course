@@ -4,6 +4,11 @@ const AuthorModel= require("../models/authorModel")
 
 const createBook1= async function (req, res) {
     let data= req.body
+    let authorId =data.author_id
+    if(!authorId){
+        res.send({status : false , msg : "author_id is not present"})
+    }
+     
     let savedData= await BookModel.create(data)
     res.send({msg: savedData})
    }
@@ -26,7 +31,7 @@ const showrange = async function (req,res){
     let goat= boat.map( x =>x.author_id)
     console.log(goat)
     let newrange = await AuthorModel.find({author_id:goat}).select({ author_name :1 , _id :0})
-    
+    console.log(newrange)
     res.send ({newrange})
 }
 
