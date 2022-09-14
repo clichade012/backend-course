@@ -25,6 +25,3 @@ const collgeSchema= new mongoose.Schema({
 
 module.exports=mongoose.model('collegeModel',collgeSchema)
 
-// { name: { mandatory, unique, example iith}, 
-// fullName: {mandatory, example `Indian Institute of Technology, Hyderabad`},
-//  logoLink: {mandatory}, isDeleted: {boolean, default: false} }
