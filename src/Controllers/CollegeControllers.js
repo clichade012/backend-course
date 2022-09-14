@@ -9,16 +9,16 @@
 
   const createCollege = async function(req,res){
     try{
-      let data = req.body
+    let data = req.body
       
     let createdata = await CollegeModel.create(data)
     res.status(201).send({status : true , data: createdata})
+    }
+    catch(err){
+    console.log(err.message)
+    res.status(500).send({msg:err.message})
 }
-catch(err){
-  console.log(err.message)
-  res.status(500).send({msg:err.message})
 }
-  }
 
 
 const getCollege = async function (req, res){
@@ -28,12 +28,12 @@ try{
   if(Object.keys(data).length==0){
     return res.status(400).send({status :false, message: "Need Some Parameter to get College"  })
   }
-  let college = await CollegeModel.findOne({name :collegeName})
-  let id = college._id
+  let college = await CollegeModel.findOne({name :collegeName, isDeleted: false})
   if(!college){
     return res.status(404).send({status:false,message:"No College Found"})
   }
-  let Interns = await InternModel.find({collegeId: id})
+  let id = college._id
+  let Interns = await InternModel.find({collegeId: id, isDeleted: false})
   if(!Interns){
     return res.status(404).send({status: false, message :"Interns Not Found"})
   }
@@ -46,8 +46,6 @@ catch(err){
   res.status(500).send({msg: err.message})
 }
 }
-
-
 
 module.exports.createCollege =createCollege
 module.exports.getCollege =getCollege
