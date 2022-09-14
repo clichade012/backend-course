@@ -1,13 +1,20 @@
+//=====================Importing Module =====================//
 const CollegeModel = require('../Model/CollegeModel')
 const InternModel = require('../Model/InternModel')
 
-
+//=====================Checking the input value is Valid or Invalid=====================//
   let checkvalid = function(value){
     if (typeof value == "undefined" || typeof value == "number" || typeof value == null) { return false }
     if (typeof value == "string" && value.trim().length == 0) { return false }
     return true
   }
+  function extraspace(str) {
+    return str.indexOf(' ') >= 0
+  }
+  
 
+
+//=====================This function is used for Creating Intern Doucment=====================//
   const createIntern= async function(req,res){
     try{
       let data = req.body
@@ -20,6 +27,7 @@ const InternModel = require('../Model/InternModel')
 
       //=====================Validation of  name=====================//
       if(!checkvalid(name))return res.status(400).send({ status: false, message: "Please Provide valid Input" })
+      if (extraspace(name))  return res.status(400).send({ status: false, message: "space are not allowed in name field" })
       if((!(/^[a-zA-Z]+([\s][a-zA-Z]+)*$/).test(name)) ) return res.status(400).send({ status: false, msg: "Please Use Correct Characters in name or Extra space is not allowed"} )
 
     //=====================Validation of mobile =====================//
