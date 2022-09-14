@@ -6,7 +6,7 @@ const collgeSchema= new mongoose.Schema({
         unique:true,
         trim:true
     },
-    fullName:{
+    fullName:{                           
         type:String,
         required:true,
         
