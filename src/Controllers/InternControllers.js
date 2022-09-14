@@ -8,11 +8,7 @@ const InternModel = require('../Model/InternModel')
     if (typeof value == "string" && value.trim().length == 0) { return false }
     return true
   }
-  function extraspace(str) {
-    return str.indexOf(' ') >= 0
-  }
   
-
 
 //=====================This function is used for Creating Intern Doucment=====================//
   const createIntern= async function(req,res){
@@ -27,18 +23,17 @@ const InternModel = require('../Model/InternModel')
 
       //=====================Validation of  name=====================//
       if(!checkvalid(name))return res.status(400).send({ status: false, message: "Please Provide valid Input" })
-      if (extraspace(name))  return res.status(400).send({ status: false, message: "space are not allowed in name field" })
-      if((!(/^[a-zA-Z]+([\s][a-zA-Z]+)*$/).test(name)) ) return res.status(400).send({ status: false, msg: "Please Use Correct Characters in name or Extra space is not allowed"} )
+      if((!(/^[a-zA-Z]+([\s][a-zA-Z]+)*$/).test(name.trim())) ) return res.status(400).send({ status: false, msg: "Please Use Correct Characters in name or Extra space is not allowed"} )
 
     //=====================Validation of mobile =====================//
-    if(!checkvalid(mobile))return res.status(400).send({ status: false, message: "Please Provide valid Input" })
+    if(!checkvalid(mobile))return res.status(400).send({ status: false, message: "Please Provide valid Mobile Number" })
     if((!(/^([+]\d{2})?\d{10}$/).test(mobile))) return res.status(400).send({ status: false, msg: "Please provide valid Mobile Number" }) 
     let DuplicateNumber = await InternModel.findOne({mobile:mobile})
     if(DuplicateNumber) return res.status(409).send({status : false , message: "This Mobile Number Already exists!"})
 
       //=====================Validation of EmailID=====================//
-      if(!checkvalid(email))return res.status(400).send({ status: false, message: "Spaces aren't Allowed." })
-      if (!(/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/).test(email)) return res.status(400).send({ status: false, msg: "Please provide valid Email" }) 
+      if(!checkvalid(email))return res.status(400).send({ status: false, message: "Please Provide valid Email" })
+      if (!(/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/).test(email.trim())) return res.status(400).send({ status: false, msg: "Please provide valid Email" }) 
       let DuplicateEmail = await InternModel.findOne({email:email})
       if(DuplicateEmail) return res.status(409).send({status : false , message: "This EmailId Already exists!"})
 
