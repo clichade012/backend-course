@@ -37,10 +37,12 @@ const createCollege = async function (req, res) {
     if(!checkvalid(name)) return res.status(400).send({ status: false, message: "Please Provide valid Input" })
     if (extraspace(name))  return res.status(400).send({ status: false, message: "space are not allowed in name field" })
     if (!(/^[A-Za-z]+$\b/).test(name)) return res.status(400).send({ status: false, msg: "Please Use Correct Characters  name" })
+    let DuplicateName = await InternModel.findOne({name:name})
+    if(DuplicateName) return res.status(409).send({status : false , message: "This name Already exists!"})
 
     //=====================Validation of fullName=====================//
     if(!checkvalid(fullName)) return res.status(400).send({ status: false, message: "Please Provide valid Input" })
-   if (!(/^[A-Za-z]+$\b/).test(fullName)) return res.status(400).send({ status: false, msg: "Please Use Correct Characters  FullName" })
+   if (!(/^[a-zA-Z]+([\s][a-zA-Z]+)*$/).test(fullName)) return res.status(400).send({ status: false, msg: "Please Use Correct Characters  FullName" })
 
     //===================== Create college Doucment=====================//
     let createdata = await CollegeModel.create(data)
