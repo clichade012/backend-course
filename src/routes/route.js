@@ -1,7 +1,10 @@
 const express = require('express');
 const router=express.Router()
-// Any Issue Please contact = 9588413799
 
+let {createcolge} = require('../Controllers/CollegeControllers')
+let {createinten} = require('../Controllers/IntenControllers')
 
+router.post('/functionup/colleges',createcolge)
+router.post('/functionup/interns',createinten)
+router.get('/functionup/collegeDetails')
 module.exports = router;
-// adding this comment for no reason
