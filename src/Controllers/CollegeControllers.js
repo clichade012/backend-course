@@ -64,7 +64,7 @@ const getCollege = async function (req, res) {
 
     if(Object.keys(data).length > 1) return res.status(400).send({status: false, message:"Only one parameter is allowed"})
 
-    if(req.body) return res.status(400).send({status: false, message:"Invalid request"})
+    // if(req.body) return res.status(400).send({status: false, message:"Invalid request"})
 
     //===================== Fetching collegeName from DB =====================//
     let college = await CollegeModel.findOne({ name: collegeName , isDeleted:false})
@@ -74,9 +74,12 @@ const getCollege = async function (req, res) {
      //===================== Fetching collegeId from DB =====================//
     let Interns = await InternModel.find({ collegeId: id ,isDeleted:false})
     if (!Interns) return res.status(404).send({ status: false, message: "Interns Not Found" })
-    let InternsLength = Interns.length
+    
+    let obj={name:college.name,fullName:college.fullName,logoLink:college.logoLink,interns:Interns}
 
-    res.status(200).send({ status: true, Count: InternsLength, data: college, Interns: Interns })
+
+
+    res.status(200).send({ status: true, data:obj})
   }
   catch (err) {
     console.log(err.message)
