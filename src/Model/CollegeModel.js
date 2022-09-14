@@ -9,13 +9,12 @@ const collgeSchema= new mongoose.Schema({
     fullName:{                           
         type:String,
         required:true,
-        
-
+        trim: true
     },
     logoLink:{
         type:String,
         required:true,
-
+        trim:true
     },
     isDeleted:{
         type:Boolean,

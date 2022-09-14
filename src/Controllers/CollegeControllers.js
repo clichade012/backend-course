@@ -9,6 +9,7 @@ let checkvalid = function (value) {
   if (typeof value == "string" && value.trim().length == 0) { return false }
   return true
 }
+
 function extraspace(str) {
   return str.indexOf(' ') >= 0
 }
@@ -17,11 +18,9 @@ function extraspace(str) {
 //=====================This function is used for Creating College Doucment=====================//
 const createCollege = async function (req, res) {
   try {
-
-
     let data = req.body
  //=====================Destructring of data object=====================//
-     const { name, fullName, logoLink } = data 
+     const { name, fullName, logoLink } = data
 //=====================here we check persence of body =====================//
 
     if (Object.keys(data).length == 0) {   
@@ -36,11 +35,13 @@ const createCollege = async function (req, res) {
     //=====================Validation of name=====================//
     if(!checkvalid(name)) return res.status(400).send({ status: false, message: "Please Provide valid Input" })
     if (extraspace(name))  return res.status(400).send({ status: false, message: "space are not allowed in name field" })
-    if (!(/^[A-Za-z]+$\b/).test(name)) return res.status(400).send({ status: false, msg: "Please Use Correct Characters  name" })
+    if (!(/^[A-Za-z]+$\b/).test(name.trim())) return res.status(400).send({ status: false, msg: "Please Use Correct Characters  name" })
+    let DuplicateName = await CollegeModel.findOne({name:name})
+    if(DuplicateName) return res.status(409).send({status : false , message: "This name Already exists!"})
 
     //=====================Validation of fullName=====================//
     if(!checkvalid(fullName)) return res.status(400).send({ status: false, message: "Please Provide valid Input" })
-   if (!(/^[A-Za-z]+$\b/).test(fullName)) return res.status(400).send({ status: false, msg: "Please Use Correct Characters  FullName" })
+   if (!(/^[a-zA-Z]+([\s][a-zA-Z]+)*$/).test(fullName.trim())) return res.status(400).send({ status: false, msg: "Please Use Correct Characters  FullName" })
 
     //===================== Create college Doucment=====================//
     let createdata = await CollegeModel.create(data)
@@ -59,23 +60,20 @@ const getCollege = async function (req, res) {
     let collegeName = data.collegeName
 
     //===================== Checking length of query=====================//
-    if (Object.keys(data).length == 0) {
-      return res.status(400).send({ status: false, message: "Need Some Parameter to get College" })
-    }
+    if (Object.keys(data).length == 0) return res.status(400).send({ status: false, message: "Need Some Parameter to get College" })
+
+    if(Object.keys(data).length > 1) return res.status(400).send({status: false, message:"Only one parameter is allowed"})
+
+    if(req.body) return res.status(400).send({status: false, message:"Invalid request"})
 
     //===================== Fetching collegeName from DB =====================//
     let college = await CollegeModel.findOne({ name: collegeName , isDeleted:false})
     let id = college._id
-    if (!college) {
-      return res.status(404).send({ status: false, message: "No College Found" })
-    }
-
-
+    if (!college) return res.status(404).send({ status: false, message: "No College Found" })
+    
      //===================== Fetching collegeId from DB =====================//
     let Interns = await InternModel.find({ collegeId: id ,isDeleted:false})
-    if (!Interns) {
-      return res.status(404).send({ status: false, message: "Interns Not Found" })
-    }
+    if (!Interns) return res.status(404).send({ status: false, message: "Interns Not Found" })
     let InternsLength = Interns.length
 
     res.status(200).send({ status: true, Count: InternsLength, data: college, Interns: Interns })
