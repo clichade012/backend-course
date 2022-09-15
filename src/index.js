@@ -1,9 +1,9 @@
 const express = require('express');
-var bodyParser = require('body-parser');
-
+const bodyParser = require('body-parser');
 const route = require('./routes/route')
 const app = express();
-const mongoose=require('mongoose')
+const { default: mongoose } = require('mongoose');
+const moment = require('moment');
 mongoose.connect("mongodb+srv://raj_3028:kWaM507ps0Icsdg0@cluster0.pw23ckf.mongodb.net/Project23", {
     useNewUrlParser: true
 })
@@ -14,6 +14,19 @@ mongoose.connect("mongodb+srv://raj_3028:kWaM507ps0Icsdg0@cluster0.pw23ckf.mongo
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+
+//===================== Global Middleware =====================//
+app.use(
+    function globalMiddleWare(req, res, next) {
+        const today = moment();
+        const formatted = today.format('YYYY-MM-DD hh:mm:ss');
+        console.log("----------------")
+        console.log("Date:-", formatted);
+        console.log("API Route Info:-", req.originalUrl);
+        next()
+    }
+)
 app.use('/', route);
 app.listen(process.env.PORT || 3000, function () {
     console.log('Express app running on port ' + (process.env.PORT || 3000))

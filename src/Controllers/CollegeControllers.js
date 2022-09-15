@@ -32,21 +32,26 @@ const createCollege = async function (req, res) {
     //   return res.status(400).send({ status: false, message: "name , fullName and Logolink are required fields !" })
     // }
     const error = {};
-    if(!name) error.nameError = "please neter rthe name";
-    if(!fullName) error.fullNameError = "please neter rthe fullName";
-    if(!logoLink) error.logoLinkError = "please neter rthe logoLink";
+    if(!name) error.nameError = "please enter the name";
+    if(!fullName) error.fullNameError = "please enter the fullName";
+    if(!logoLink) error.logoLinkError = "please enter the logoLink";
     if(Object.keys(error).length > 0) return res.status(400).send({status:false, message:error});
 
     //=====================Validation of name=====================//
     if(!checkvalid(name)) return res.status(400).send({ status: false, message: "Please Provide valid Input" })
     if (extraspace(name))  return res.status(400).send({ status: false, message: "space are not allowed in name field" })
-    if (!(/^[A-Za-z]+$\b/).test(name.trim())) return res.status(400).send({ status: false, msg: "Please Use Correct Characters  name" })
+ 
+    if (!(/^[A-Za-z]+$\b/).test(name.trim().toLowerCase())) return res.status(400).send({ status: false, msg: "Please Use Correct Characters  name" })
     let DuplicateName = await CollegeModel.findOne({name:name})
     if(DuplicateName) return res.status(409).send({status : false , message: "This name Already exists!"})
 
     //=====================Validation of fullName=====================//
     if(!checkvalid(fullName)) return res.status(400).send({ status: false, message: "Please Provide valid Input" })
    if (!(/^[a-zA-Z]+([\s][a-zA-Z]+)*$/).test(fullName.trim())) return res.status(400).send({ status: false, msg: "Please Use Correct Characters  FullName" })
+
+    //=====================Validation of Logolink=====================//
+    if(!checkvalid(logoLink)) return res.status(400).send({ status: false, message: "Please Provide valid Input for logolink"})
+
 
     //===================== Create college Doucment=====================//
     let createdata = await CollegeModel.create(data)
@@ -69,19 +74,30 @@ const getCollege = async function (req, res) {
 
     if(Object.keys(data).length > 1) return res.status(400).send({status: false, message:"Only one parameter is allowed"})
 
-    if(Object.keys(req.body).length != 0 )  return res.status(400).send({status: false, message:"Invalid request due to body parameter!"})
+     if(Object.keys(req.body).length!== 0)return res.status(400).send({status: false, message:"Invalid request"})
 
-    //===================== Fetching collegeName from DB =====================//
-    let college = await CollegeModel.findOne({ name: collegeName , isDeleted:false})
-    let id = college._id
-    if (!college) return res.status(404).send({ status: false, message: "No College Found" })
+   
+    
     
      //===================== Fetching collegeId from DB =====================//
-    let Interns = await InternModel.find({ collegeId: id ,isDeleted:false})
-    if (!Interns) return res.status(404).send({ status: false, message: "Interns Not Found" })  // Modification
-    let InternsLength = Interns.length
+     let college = await CollegeModel.findOne({ name: collegeName , isDeleted:false})
+    if(college){
+      var id = college._id
+    }
+    
+    if (college == null) return res.status(404).send({ status: false, message: "No College Found" })
+  
+     //===================== Fetching collegeId from DB =====================//
+    let Interns = await InternModel.find({ collegeId:id ,isDeleted:false}).select({name:1,email:1,mobile:1,_id:0})
+    if(Interns.length == 0){
+      Interns = "No one applied for Interns"
+    }
+  
+    let obj={name:college.name , fullName:college.fullName, logoLink:college.logoLink, interns:Interns}
 
-    res.status(200).send({ status: true, Count: InternsLength, data: college, Interns: Interns })
+
+
+    res.status(200).send({ status: true, data:obj})
   }
   catch (err) {
     console.log(err.message)

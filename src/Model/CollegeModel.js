@@ -4,7 +4,8 @@ const collgeSchema= new mongoose.Schema({
         type:String,
         required:true,
         unique:true,
-        trim:true
+        trim:true,
+        lowercase:true
     },
     fullName:{                           
         type:String,
@@ -20,7 +21,7 @@ const collgeSchema= new mongoose.Schema({
         type:Boolean,
         default:false
     }
-},{timestamps: true})
+})
 
 module.exports=mongoose.model('collegeModel',collgeSchema)
 
