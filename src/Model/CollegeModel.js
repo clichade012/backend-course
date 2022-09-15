@@ -1,5 +1,5 @@
 const mongoose=require('mongoose')
-const collgeSchema= new mongoose.Schema({
+const collegeSchema= new mongoose.Schema({
     name:{
         type:String,
         required:true,
@@ -23,5 +23,5 @@ const collgeSchema= new mongoose.Schema({
     }
 })
 
-module.exports=mongoose.model('collegeModel',collgeSchema)
+module.exports=mongoose.model('collegeModel',collegeSchema)
 
