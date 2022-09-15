@@ -1,55 +1,41 @@
 //=====================Importing Module =====================//
 const CollegeModel = require('../Model/CollegeModel')
 const InternModel = require('../Model/InternModel')
+const isValid = require('../Validaters/Collgevalidater')
 
-//=====================Checking the input value is Valid or Invalid=====================//
-
-let checkvalid = function (value) {
-  if (typeof value == "undefined" || typeof value == "number" || typeof value == null) { return false }
-  if (typeof value == "string" && value.trim().length == 0) { return false }
-  return true
-}
-
-function extraspace(str) {
-  return str.indexOf(' ') >= 0
-}
 
 
 //=====================This function is used for Creating College Doucment=====================//
 const createCollege = async function (req, res) {
   try {
     let data = req.body
- //=====================Destructring of data object=====================//
-     const { name, fullName, logoLink } = data
-//=====================here we check persence of body =====================//
-
-    if (Object.keys(data).length == 0) {   
-      return res.status(400).send({ status: false, message: "Body should be not empty" })
+    if (Object.keys(data).length == 0) {
+      return res.status(400).send({ status: false, message: "Body should not be empty" })
+    }
+    let Name = isValid.isValidName(data.name)
+    if (Name) {
+      return res.status(400).send({ status: false, message: Name })
     }
 
-   //=====================we give  requirement of mandatory fields =====================//
-    if (!(name && fullName && logoLink)) {     
-      return res.status(400).send({ status: false, message: "name , fullName and Logolink are required fields !" })
+    let fullName = isValid.isValidfullName(data.fullName)
+    if (fullName) {
+      return res.status(400).send({ status: false, message: fullName })
     }
 
-    //=====================Validation of name=====================//
-    if(!checkvalid(name)) return res.status(400).send({ status: false, message: "Please Provide valid Input" })
-    if (extraspace(name))  return res.status(400).send({ status: false, message: "space are not allowed in name field" })
-    if (!(/^[A-Za-z]+$\b/).test(name.trim())) return res.status(400).send({ status: false, msg: "Please Use Correct Characters  name" })
-    let DuplicateName = await CollegeModel.findOne({name:name})
-    if(DuplicateName) return res.status(409).send({status : false , message: "This name Already exists!"})
-
-    //=====================Validation of fullName=====================//
-    if(!checkvalid(fullName)) return res.status(400).send({ status: false, message: "Please Provide valid Input" })
-   if (!(/^[a-zA-Z]+([\s][a-zA-Z]+)*$/).test(fullName.trim())) return res.status(400).send({ status: false, msg: "Please Use Correct Characters  FullName" })
-
-    //===================== Create college Doucment=====================//
+    let LogoLink = isValid.isValidLogoLink(data.logoLink)
+    if (LogoLink) {
+      return res.status(400).send({ status: false, message: LogoLink })
+    }
+    let checkName = await CollegeModel.findOne({ name: data.name, isDeleted: false })
+    if (checkName) {
+      return res.status(404).send({ status: false, message: "collge name already exists." })
+    }
+    data['name'] = data.name.toLowerCase()
     let createdata = await CollegeModel.create(data)
-    res.status(201).send({ status: true, data: createdata })
+    return res.status(201).send({ status: true, data: createdata })
   }
-  catch (err) {
-    console.log(err.message)
-    res.status(500).send({ msg: err.message })
+  catch (error) {
+    return res.status(500).send({ status: false, message: error.message })
   }
 }
 
@@ -60,26 +46,30 @@ const getCollege = async function (req, res) {
     let collegeName = data.collegeName
 
     //===================== Checking length of query=====================//
+
     if (Object.keys(data).length == 0) return res.status(400).send({ status: false, message: "Need Some Parameter to get College" })
-
-    if(Object.keys(data).length > 1) return res.status(400).send({status: false, message:"Only one parameter is allowed"})
-
-    // if(req.body) return res.status(400).send({status: false, message:"Invalid request"})
-
     //===================== Fetching collegeName from DB =====================//
-    let college = await CollegeModel.findOne({ name: collegeName , isDeleted:false})
-    let id = college._id
-    if (!college) return res.status(404).send({ status: false, message: "No College Found" })
-    
-     //===================== Fetching collegeId from DB =====================//
-    let Interns = await InternModel.find({ collegeId: id ,isDeleted:false})
-    if (!Interns) return res.status(404).send({ status: false, message: "Interns Not Found" })
-    
-    let obj={name:college.name,fullName:college.fullName,logoLink:college.logoLink,interns:Interns}
+    let college = await CollegeModel.findOne({ name: collegeName, isDeleted: false })
+    if (college) {
+      var id = college._id
+    }
 
+    if (college == null) return res.status(404).send({ status: false, message: "No College Found" })
 
+    //===================== Fetching collegeId from DB =====================//
+    let Interns = await InternModel.find({ collegeId: id, isDeleted: false }).select({ name: 1, email: 1, mobile: 1, _id: 0 })
+    if (Interns.length == 0) {
+      Interns = "Interns are not available in this college !"
+    }
 
-    res.status(200).send({ status: true, data:obj})
+    let obj = {
+      name: college.name,
+      fullName: college.fullName,
+      logoLink: college.logoLink,
+      interns: Interns
+    }
+
+    res.status(200).send({ status: true, data: obj })
   }
   catch (err) {
     console.log(err.message)
