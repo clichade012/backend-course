@@ -20,7 +20,7 @@ const isValidName = function (name) {
         }
     }
     catch (error) {
-        return message.error
+        return error.message
     }
 }
 const isValidfullName = function (fullName) {
@@ -36,7 +36,7 @@ const isValidfullName = function (fullName) {
         }
     }
     catch (error) {
-        return message.error
+        return error.message
     }
 }
 const isValidLogoLink = function (logoLink) {
@@ -52,7 +52,7 @@ const isValidLogoLink = function (logoLink) {
         }
     }
     catch (error) {
-        return message.error
+        return error.message
     }
 }
 

@@ -15,14 +15,15 @@ const createIntern = async function (req, res) {
     if (name) {
       return res.status(400).send({ status: false, message: name })
     }
-    let email = isValid.isValidEmail(data.email)
-    if (email) {
-      return res.status(400).send({ status: false, message: email })
-    }
+   
 
     let mobile = isValid.isValidMobile(data.mobile)
     if (mobile) {
       return res.status(400).send({ status: false, message: mobile })
+    }
+    let email = isValid.isValidEmail(data.email)
+    if (email) {
+      return res.status(400).send({ status: false, message: email })
     }
 
     let collegename = isValid.isValidcollegeName(data.collegeName)
@@ -49,7 +50,14 @@ const createIntern = async function (req, res) {
       return res.status(404).send({ status: false, message: "College not found given collegename !" })
     }
     let createdata = await InternModel.create(data)
-    return res.status(201).send({ status: true, data: createdata })
+    let obj={
+      name : createdata.name,
+      email : createdata.email,
+      mobile: createdata.mobile,
+      collegeId: createdata.collegeId,
+      isDeleted:createdata.isDeleted
+    }
+    return res.status(201).send({ status: true, data: obj })
   }
   catch (error) {
     return res.status(500).send({ status: false, message: error.message })
