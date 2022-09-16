@@ -7,6 +7,7 @@ const moment = require('moment');
 mongoose.connect("mongodb+srv://raj_3028:kWaM507ps0Icsdg0@cluster0.pw23ckf.mongodb.net/Project23", {
     useNewUrlParser: true
 })
+
 .then( () => console.log("MongoDb is connected"))
 .catch ( err => console.log(err) )
 

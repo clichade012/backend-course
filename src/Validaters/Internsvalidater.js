@@ -25,7 +25,7 @@ const isValidName = function (name) {
         }
     }
     catch (error) {
-        return message.error
+        return error.message
     }
 }
 
@@ -47,7 +47,7 @@ const isValidEmail = function (email) {
         }
     }
     catch (error) {
-        return message.error
+        return error.message
     }
 }
 
@@ -68,7 +68,7 @@ const isValidMobile = function (mobile) {
         }
     }
     catch (error) {
-        return message.error
+        return error.message
     }
 }
 
@@ -87,7 +87,7 @@ const isValidcollegeName = function (collegeName) {
         }
     }
     catch (error) {
-        return message.error
+        return error.message
     }
 }
 

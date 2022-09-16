@@ -32,7 +32,13 @@ const createCollege = async function (req, res) {
     }
     data['name'] = data.name.toLowerCase()
     let createdata = await CollegeModel.create(data)
-    return res.status(201).send({ status: true, data: createdata })
+    let obj={
+      name:createdata.name,
+      fullName:createdata.fullName,
+      logoLink:createdata.logoLink,
+      isDeleted:createdata.isDeleted
+    }
+    return res.status(201).send({ status: true, data: obj })
   }
   catch (error) {
     return res.status(500).send({ status: false, message: error.message })
@@ -57,7 +63,7 @@ const getCollege = async function (req, res) {
     if (college == null) return res.status(400).send({ status: false, message: "No College Found" })
 
     //===================== Fetching collegeId from DB =====================//
-    let Interns = await InternModel.find({ collegeId: id, isDeleted: false }).select({ name: 1, email: 1, mobile: 1, _id: 0 })
+    let Interns = await InternModel.find({ collegeId: id, isDeleted: false }).select({ name: 1, email: 1, mobile: 1 })
     if (Interns.length == 0) {
       Interns = "Interns are not available in this college !"
     }
