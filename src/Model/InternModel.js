@@ -25,7 +25,8 @@ const internSchema = new mongoose.Schema(
             trim :true
     
         },
-        collegeId : {type:ObjectId,
+        collegeId : {
+            type:ObjectId,
             ref :"collegeModel",
             trim: true
         },

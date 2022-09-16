@@ -28,7 +28,7 @@ const createCollege = async function (req, res) {
     }
     let checkName = await CollegeModel.findOne({ name: data.name, isDeleted: false })
     if (checkName) {
-      return res.status(404).send({ status: false, message: "collge name already exists." })
+      return res.status(400).send({ status: false, message: "college name already exists." })
     }
     data['name'] = data.name.toLowerCase()
     let createdata = await CollegeModel.create(data)
@@ -45,7 +45,7 @@ const createCollege = async function (req, res) {
   }
 }
 
-//=====================TThis function used for Fetching a college document=====================//
+//=====================This function used for Fetching a college document=====================//
 const getCollege = async function (req, res) {
   try {
     let data = req.query
@@ -60,7 +60,7 @@ const getCollege = async function (req, res) {
       var id = college._id
     }
 
-    if (college == null) return res.status(404).send({ status: false, message: "No College Found" })
+    if (college == null) return res.status(400).send({ status: false, message: "No College Found" })
 
     //===================== Fetching collegeId from DB =====================//
     let Interns = await InternModel.find({ collegeId: id, isDeleted: false }).select({ name: 1, email: 1, mobile: 1 })

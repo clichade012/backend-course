@@ -20,10 +20,10 @@ const isValidName = function (name) {
             return "intern name is required."
         }
         if (typeof name !== 'string') {
-            return "intern name should be string."
+            return "intern name should be in string!"
         }
         if (stringContainsNumber(name)) {
-            return "intern name should be letters not allowed number." 
+            return "intern name should be  in letters! ." 
         }
     }
     catch (error) {
@@ -35,13 +35,13 @@ const isValidName = function (name) {
 const isValidEmail = function (email) {
     try {
         if (!email) {
-            return "email is required."
+            return "email is required ! "
         }
         if (typeof email !== 'string') {
-            return "email should be string."
+            return "email should be in string ! "
         }
         if (whitespace(email)) {
-            return "Make sure email should not have space." 
+            return "Make sure email should not have any  space ! " 
         }
         let EmailId = isEmail(email)
         if (EmailId == false) {
@@ -57,16 +57,16 @@ const isValidEmail = function (email) {
 const isValidMobile = function (mobile) {
     try {
         if (!mobile) {
-            return "mobile is required."
+            return "mobile number is required !"
         }
         if (typeof mobile !== 'string') {
-            return "mobile should be in string."
+            return "mobile number should be in string ! "
         }
         if (whitespace(mobile)) {
-            return "Make sure mobile should not have space." 
+            return "Make sure mobile  number should not have space ! " 
         }
         if (mobile.length< 10 || mobile.length>10) {
-            return "mobile should be of 10 digits."
+            return "mobile number should be of 10 digits ! "
         }
     }
     catch (error) {
@@ -82,10 +82,10 @@ const isValidcollegeName = function (collegeName) {
             return "college name is required."
         }
         if (typeof collegeName !== 'string') {
-            return "collge name should be string."
+            return "collge name should be in string ! "
         }
         if (whitespace(collegeName)) {
-            return "Make sure college name should not have space1 ." 
+            return "Make sure college name should not have space ! " 
         }
     }
     catch (error) {
