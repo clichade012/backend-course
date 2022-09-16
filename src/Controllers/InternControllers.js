@@ -42,16 +42,7 @@ const createIntern = async function (req, res) {
       return res.status(400).send({ status: false, message: "email already exists." })
     }
     
-    let collegeName = data.collegeName
-
-    let college = await CollegeModel.findOne({ name: collegeName })
-    if (college) {
-      var id = college._id
-      data["collegeId"] = id
-    }
-    if (college == null) {
-      return res.status(400).send({ status: false, message: "College not found given collegename !" })
-    }
+   
     let createdata = await InternModel.create(data)
     return res.status(201).send({ status: true, data: createdata })
   }

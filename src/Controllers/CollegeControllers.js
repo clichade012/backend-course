@@ -69,7 +69,7 @@ const getCollege = async function (req, res) {
       interns: Interns
     }
 
-    res.status(200).send({ status: true, data: obj })
+  return   res.status(200).send({ status: true, data: obj })
   }
   catch (err) {
     console.log(err.message)

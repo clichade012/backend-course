@@ -8,10 +8,8 @@ function stringContainsNumber(_string) {
 function isEmail(emailAdress) {
     let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     // w use for char * use for breakpoint $ for end
-    if (regex.test(emailAdress))
-        return true;
-    else
-        return false;
+    return regex.test(emailAdress)
+        
 }
 
 const isValidName = function (name) {
