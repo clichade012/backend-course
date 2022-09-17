@@ -40,14 +40,8 @@ const createIntern = async function (req, res) {
     
    
     let createdata = await InternModel.create(data)
-    let obj={
-      name : createdata.name,
-      email : createdata.email,
-      mobile: createdata.mobile,
-      collegeId: createdata.collegeId,
-      isDeleted:createdata.isDeleted
-    }
-    return res.status(201).send({ status: true, data: obj })
+    
+    return res.status(201).send({ status: true, data: createdata })
   }
   catch (error) {
     return res.status(500).send({ status: false, message: error.message })
