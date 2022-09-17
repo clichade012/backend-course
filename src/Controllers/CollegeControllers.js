@@ -2,13 +2,14 @@
 const CollegeModel = require('../Model/CollegeModel')
 const InternModel = require('../Model/InternModel')
 const isValid = require('../Validaters/Collgevalidater')
-
+const Validlogo = require('../Validaters/Collgevalidater')
 
 
 //=====================This function is used for Creating College Doucment=====================//
 const createCollege = async function (req, res) {
   try {
     let data = req.body
+    let { logoLink}=data
     if (Object.keys(data).length == 0) {
       return res.status(400).send({ status: false, message: "Body should not be empty" })
     }
@@ -26,19 +27,18 @@ const createCollege = async function (req, res) {
     if (LogoLink) {
       return res.status(400).send({ status: false, message: LogoLink })
     }
+    if(!Validlogo.validLogoLink(logoLink))
+    return res.status(400).send({status:false,msg:"logolink is invalid"});
+
     let checkName = await CollegeModel.findOne({ name: data.name, isDeleted: false })
     if (checkName) {
       return res.status(400).send({ status: false, message: "college name already exists." })
     }
-    data['name'] = data.name.toLowerCase()
+   
     let createdata = await CollegeModel.create(data)
-    let obj={
-      name:createdata.name,
-      fullName:createdata.fullName,
-      logoLink:createdata.logoLink,
-      isDeleted:createdata.isDeleted
-    }
-    return res.status(201).send({ status: true, data: obj })
+    
+    
+    return res.status(201).send({ status: true, data: createdata })
   }
   catch (error) {
     return res.status(500).send({ status: false, message: error.message })
