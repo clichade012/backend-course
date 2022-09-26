@@ -43,7 +43,7 @@ const validTitle = function (value) {
     return regex.test(value)
 };
 const isValidPinCode = function (pincode) {
-    const Regex = /^[1-9]{6}$/
+    const Regex = /^[0-9]{6}$/
     return Regex.test(pincode);
 }
 const isValidDate = function (date) {

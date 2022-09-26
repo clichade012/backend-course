@@ -16,8 +16,11 @@ const createBook = async function (req, res) {
 
 
         //<<----------------------------title---------------------------- >>//
-
-        if (!isValid(title.trim()) || !validTitle(title.trim()) || (!isValidName(title.trim()))) {
+        if (!title){
+            return res
+                .status(400).send({ status: false, message: "Provide title field!" })
+        }
+        if (!isValid(title.trim()) || isValidMixed(title.trim()) ) {
             return res
                 .status(400)
                 .send({ status: false, message: "Please provide Title & alphabet only" })
@@ -28,8 +31,11 @@ const createBook = async function (req, res) {
             return res
                 .status(400)
                 .send({ status: false, message: "title is already exit." })
-
-
+         if (!excerpt){
+                    return res
+                        .status(400).send({ status: false, message: "Provide excerpt field!" })
+                }
+    
         if (!isValid(excerpt.trim())) {
             return res
                 .status(400)
@@ -41,6 +47,11 @@ const createBook = async function (req, res) {
                 .status(400)
                 .send({ status: false, message: " Please enter valid excerpt" })
         //<<---------------------------------ISBN-------------------------------->>//
+        if (!ISBN){
+            return res
+                .status(400).send({ status: false, message: "Provide ISBN field!" })
+        }
+
         if (!isValid(ISBN.trim()) || !isValidISBN(ISBN.trim())) {
             return res
                 .status(400)
@@ -52,18 +63,31 @@ const createBook = async function (req, res) {
                 .status(400)
                 .send({ status: false, message: "ISBN is already exists." })
         //<<---------------------catagory--------------------------------------->>//
+
+        if (!category){
+            return res
+                .status(400).send({ status: false, message: "Provide category field!" })
+        }
         if (!isValid(category.trim()) || (!isValidName(category.trim()))) {
             return res
                 .status(400)
                 .send({ status: false, message: "Please provide category & alphabet only." })
         }
         //<<---------------------subcatagory------------------------------------>>//
+
+        if (!subcategory){
+            return res
+                .status(400).send({ status: false, message: "Provide subcategory field!" })
+        }
         if (!isValid(subcategory.trim()) || (!isValidName(subcategory.trim()))) {
             return res
                 .status(400)
                 .send({ status: false, message: "Please provide subcategory & alphabet only." })
         }
-
+        if (!releasedAt){
+            return res
+                .status(400).send({ status: false, message: "Provide released At field!" })
+        }
         if (!isValidDate(releasedAt.trim())) {
             return res.status(400).send({ status: false, message: "please provide valid format date [Ex: format(YYYY-MM-DD)]" })
         }
@@ -140,7 +164,7 @@ const Bookbyparams = async function (req, res) {
                 .status(400)
                 .send({ status: false, message: "Please provide valid bookId." })
 
-        let checkBookid = await bookModel.findOne({ _id: Bookid })
+        let checkBookid = await bookModel.findOne({ _id: Bookid,isDeleted:false })
 
         if (!checkBookid) {
             return res.status(404).send({ status: false, message: "No document founded!" })
