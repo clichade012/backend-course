@@ -60,13 +60,17 @@ const geturl = async function(req,res){
         return res.status(400).send({ status: false , message : "Urlcode must be present !"})
     }
 
-    const checkurl = await UrlModel.findOne({ urlCode:urlc}).select({longUrl:1 })
-    if(!checkurl){
-        return res.status(403).send({ status:false , message: " Url code is invalid"})
+    const checkurl = await UrlModel.findOne({ urlCode:urlc})
+      if(!checkurl){
+        return res.status(403).send({ status:false , message: " Url code is not found"})
     }
-     return res.status(302).send({status:true , data:checkurl})
+     return res.redirect(checkurl.longUrl)
   
 
 }
+
+
+
+
 
 module.exports= {createUrl,geturl}
