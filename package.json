@@ -4,7 +4,8 @@
   "description": "Cluster Name _ mongodb+srv://rakib123:rakib1234@cluster0.bwxs7wf.mongodb.net/group55Database",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": " nodemon src/index.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,8 @@
     "express": "^4.18.1",
     "mongoose": "^6.6.2",
     "nodemon": "^2.0.20",
-    "parser": "^0.1.4"
+    "parser": "^0.1.4",
+    "shortid": "^2.2.16",
+    "valid-url": "^1.0.9"
   }
 }
