@@ -31,10 +31,10 @@ const createUrl = async function(req, res) {
         
 
 
-        let urlCode = shortid.generate()
+        let urlCode = shortid.generate().toLowerCase()
         let urlAlreadyUsed = await UrlModel.findOne({ longUrl })
         if (urlAlreadyUsed) {
-            return res.status(400).send({ status: false, message: "url already used" })
+            return res.status(200).send({ status: true, message: "already present in db", data: urlAlreadyUsed })
             
         } else {
 
