@@ -1,6 +1,8 @@
 const UrlModel = require('../model/urlModel')
 const validUrl = require('valid-url')
 const shortid = require('shortid')
+const redis = require("redis");
+const { promisify } = require("util");
 
 const isValid = function (value){
     if (typeof value === 'undefined' || value === null) return false
@@ -9,6 +11,27 @@ const isValid = function (value){
     return true;
 }
 // create a short URL====================================//
+
+const redisClient = redis.createClient(
+    17456,
+    "redis-17456.c301.ap-south-1-1.ec2.cloud.redislabs.com",
+    { no_ready_check: true }
+  );
+  redisClient.auth("vZZ1EVOuSk5IAI7ffEGstefqr64pyNiR", function (err) {
+    if (err) throw err;
+  });
+  
+  redisClient.on("connect", async function () {
+    console.log("Connected to Redis..");
+  });
+
+
+//Connection setup for redis
+
+const SET_ASYNC = promisify(redisClient.SET).bind(redisClient);
+const GET_ASYNC = promisify(redisClient.GET).bind(redisClient)
+
+
 const createUrl = async function(req, res) {
     try {
         let data = req.body
