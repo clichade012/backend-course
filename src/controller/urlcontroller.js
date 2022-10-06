@@ -97,7 +97,7 @@ const createUrl = async function (req, res) {
             await SET_ASYNC(`${longUrl}`, JSON.stringify(urlPresent))
 
 
-            return res.status(200).send({ status: true, data: urlPresent })
+            return res.status(200).send({ status: true, message : " Already Present in Cached" ,data: urlPresent })
 
         }
 
@@ -130,7 +130,7 @@ const createUrl = async function (req, res) {
 
         const createUrl = await UrlModel.create(newUrl)
 
-        return res.status(201).send({ status: true, data: newUrl })
+        return res.status(201).send({ status: true, message: "New Url created", data: newUrl })
 
     }
 
