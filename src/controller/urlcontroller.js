@@ -34,6 +34,7 @@ const createUrl = async function(req, res) {
     try {
         let data = req.body
         let { longUrl } = data // destructuring
+        // console.log(longUrl)
         
          
         if (Object.keys(data).length == 0) {
@@ -50,10 +51,7 @@ const createUrl = async function(req, res) {
         if (!validUrl.isUri(longUrl)) {
             return res.status(400).send({ status: false, msg: "longUrl is not a valid url" })
         }
-        let cache = await GET_ASYNC(`${longUrl}`)
-       if(cache){
-         res.send(cache)
-      }
+        
 
          let urlCode = shortid.generate().toLowerCase()
         let urlAlreadyUsed = await UrlModel.findOne({ longUrl })
@@ -65,12 +63,22 @@ const createUrl = async function(req, res) {
             let baseUrl = 'http://localhost:3000'
             let shortUrl = baseUrl + '/' + urlCode
 
-            let urlCreated = { urlCode: urlCode, longUrl, shortUrl: shortUrl }
-            let newUrl = await UrlModel.create(urlCreated)
+            let urlCreated = {  longUrl, shortUrl: shortUrl,urlCode: urlCode }
+            let newUrle = await UrlModel.create(urlCreated)
+
+
+            let newUrl={longUrl: newUrle.longUrl, shortUrl:newUrle.shortUrl, urlcode:newUrle.urlCode  }
+
+        //     let cache = await GET_ASYNC(`${longUrl}`)
+    
+        //     if(cache){
+        //    res.send(cache)
+            
            await SET_ASYNC(`${longUrl}`, JSON.stringify(urlCreated))
             return res.status(201).send({ status: true, message: "url created successfully", data: newUrl })
         }
-    } catch (error) {
+    }
+     catch (error) {
         console.log(error)
         res.status(500).send({ status: false, error: error.message })
     }
