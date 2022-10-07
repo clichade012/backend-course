@@ -117,7 +117,7 @@ const createUrl = async function (req, res) {
 
         if (dupshortUrl) {
 
-            return res.status(400).send({ status: false, message: "shortUrl already exist in tha db" })
+            return res.status(409).send({ status: false, message: "shortUrl already exist in tha db" })
 
         }
 
@@ -163,7 +163,7 @@ const geturl = async function(req,res){
 
     const checkurl = await UrlModel.findOne({ urlCode:urlc})
       if(!checkurl){
-        return res.status(403).send({ status:false , message: " Url code is not found"})
+        return res.status(404).send({ status:false , message: " Url code is not found"})
     }
 
     await SET_ASYNC(`${urlc}`, JSON.stringify(checkurl))
