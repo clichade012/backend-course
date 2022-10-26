@@ -372,7 +372,7 @@ const updateproduct = async function (req, res) {
       return res.status(400).send({ status: false, message: "Valid key is ProductImage. Please provide file with key productImage" });
     }
 
-    productImage = await uploadFile.uploadFile(file[0]);
+    productImage = await uploadFile(file[0]);
     obj.productImage = productImage
 
     //_______________________________If invalid format of image is given________________________
