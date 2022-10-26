@@ -142,7 +142,7 @@ const updatereview = async function (req, res) {
 
         // console.log();
         let updreview = await reviewModel.findOneAndUpdate({ _id: reviewid, isDeleted: false }, { $set: { review: review, rating: rating, reviewedBy: reviewedBy } }, { new: true })
-        console.log(updreview);
+      //    console.log(updreview);
         if (!updreview) {
             return res.status(400).send({ status: false, message: "review id not found" })
         }

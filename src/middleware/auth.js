@@ -11,7 +11,7 @@ const authentication = function (req, res, next) {
     let token = req.headers["x-api-key"];
 
     if (!token) {
-      res.status(403).send({ status: false, message: "Token not found" });
+      res.status(401).send({ status: false, message: "Token not found" });
     }
 
     jwt.verify(token, "FunctionUp-bookmanagement-library", function (error, decodedToken) {
